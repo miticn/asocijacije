@@ -6,6 +6,8 @@ $(document).ready(function() {
 
     let turn = "blue";
 
+    let inputAnswer = ["A","B","C","D","final"];
+
     let blockInput ={
         A : false,
         B : false,
@@ -15,16 +17,21 @@ $(document).ready(function() {
     };
 
 
-    function updateInputBlock(blockInput){
-        for(j=0,g = String.fromCharCode(65 + j); j<4; j++,g = String.fromCharCode(65 + j)){
-            $("#"+g).prop( "disabled", blockInput[g]);
-        }
-        $("#final").prop( "disabled", blockInput["final"]);
+    function printPotez(){
+        $("h1").text("Trenutno je potez: "+turn);
     }
 
-    function blockTyping(){
+    function start(){
         
     }
+
+    function updateInputBlock(blockInput){
+        //alert(JSON.stringify(blockInput));
+        for(j=0; j<5; j++){
+            $("#"+inputAnswer[j]).prop( "disabled", blockInput[inputAnswer[j]]);
+        }
+    }
+
 
     let asocijacija ={
         A : ["ZANIMANJE","POSAO","VOJNIK","ADVOKAT","PROFESIJA"],
@@ -35,7 +42,7 @@ $(document).ready(function() {
 
     let curAsocijacija = asocijacija;
 
-    for(i=1; i<=4; i++){
+    for(i=1; i<=4; i++){//Open field
         for(j=0,g = String.fromCharCode(65 + j); j<4; j++,g = String.fromCharCode(65 + j)){
             //alert("#"+g+i);
             $("#"+g+i).click(function (){
@@ -46,5 +53,28 @@ $(document).ready(function() {
         }
     }
 
-    updateInputBlock(blockInput);
+    //Block other input
+    for(j=0; j<5; j++){
+        $("#"+inputAnswer[j]).on('input', function() {
+            if($(this).val()!=""){
+                for(j=0; j<5; j++){
+                    blockInput[inputAnswer[j]] = true;
+                }
+                //alert($(this).attr("id"));
+                blockInput[$(this).attr("id")] = false;
+            }
+            else{
+                for(j=0; j<5; j++){
+                    blockInput[inputAnswer[j]] = false;
+                }
+            }
+            updateInputBlock(blockInput);
+            
+        });
+    }
+    
+
+    printPotez();
+
+
 })
