@@ -2,12 +2,24 @@ $(document).ready(function() {
     function getAsoc(max){
         return Math.floor(Math.random() * max) + 1;
     }
+
+    const trajanjePoteza = 10*1000;
+    const trajanjeIgre = 4*60*1000;
     let blockOpen = false;
 
-    let turn = "blue";
+    let potezTimer;
+
+    let turn = "Plavi";
 
     let inputAnswer = ["A","B","C","D","final"];
 
+    let answered = {
+        A : false,
+        B : false,
+        C : false,
+        D : false,
+        final : false
+    }
     let blockInput ={
         A : false,
         B : false,
@@ -16,13 +28,76 @@ $(document).ready(function() {
         final : false
     };
 
+    function tacanOdgovor(kolona){// poseban slucaj za final
+        let boja;
+        if(turn == 'Plavi') boja = "blue";
+        else if(turn == 'Crveni') boja = "red";
+
+        for(i=1;i<=4;i++){
+            polje = "#"+kolona+i;
+            $(polje).val(curAsocijacija[kolona][i-1]);
+            $(polje).css("background-color",boja);
+        }
+        $("#"+kolona).css("background-color",boja);
+        $("#"+kolona).val(curAsocijacija[kolona][4]);
+        answered[kolona] = true;
+        blockInput[kolona] = true;
+        updateInputBlock(answered);
+    }
+
+    function odgovori(){
+        if($("#A").val().toUpperCase()==curAsocijacija["A"][4] && !answered["A"]){
+            tacanOdgovor("A");
+        }
+        else if($("#B").val().toUpperCase()==curAsocijacija["B"][4] && !answered["B"]){
+            tacanOdgovor("B");
+        }
+        else if($("#C").val().toUpperCase()==curAsocijacija["C"][4] && !answered["C"]){
+            tacanOdgovor("C");
+        }
+        else if($("#D").val().toUpperCase()==curAsocijacija["D"][4]  && !answered["D"]){
+            tacanOdgovor("D");
+        }
+        else if($("#final").val().toUpperCase()==curAsocijacija["final"] && !answered["final"]){
+            tacanOdgovor("final")
+        }
+        else{
+            alert("Netacno");
+            promenaPoteza();
+        }
+    }
+
+    function promenaPoteza(){
+        window.clearTimeout(potezTimer);
+        potezTimer = window.setTimeout(istekaoPotez,trajanjePoteza);
+        if(turn == 'Plavi') turn = 'Crveni';
+        else if(turn == 'Crveni') turn = 'Plavi';
+        printPotez();
+        blockOpen = false;
+    }
 
     function printPotez(){
         $("h1").text("Trenutno je potez: "+turn);
+        if(turn == 'Plavi') document.body.style.backgroundColor = "#bec6ed";
+        else if(turn == 'Crveni') document.body.style.backgroundColor = "#edbebe";
+
+    }
+    function istekloVreme(){
+        window.clearTimeout(potezTimer);
+        alert("Isteklo vreme");
+    }
+
+    function istekaoPotez(){
+        promenaPoteza();
     }
 
     function start(){
-        
+        window.setTimeout(istekloVreme,trajanjeIgre);
+
+        potezTimer = window.setTimeout(istekaoPotez,trajanjePoteza);
+
+
+
     }
 
     function updateInputBlock(blockInput){
@@ -37,7 +112,8 @@ $(document).ready(function() {
         A : ["ZANIMANJE","POSAO","VOJNIK","ADVOKAT","PROFESIJA"],
         B : ["PRED VRATIMA","VOJSKOVOĐA","KARTAGINA","SLONOVI","HANIBAL"],
         C : ["MIŠIĆ","DUGAČAK","CIPELA","DLAKA","JEZIK"],
-        D : ["FONOLOGIJA","SINTAKSA","SEMANTIKA","PRAVILA","GRAMATIKA"]
+        D : ["FONOLOGIJA","SINTAKSA","SEMANTIKA","PRAVILA","GRAMATIKA"],
+        final : "LEKTOR"
     };
 
     let curAsocijacija = asocijacija;
@@ -65,7 +141,7 @@ $(document).ready(function() {
             }
             else{
                 for(j=0; j<5; j++){
-                    blockInput[inputAnswer[j]] = false;
+                    blockInput = answered;
                 }
             }
             updateInputBlock(blockInput);
@@ -73,8 +149,11 @@ $(document).ready(function() {
         });
     }
     
-
+    start();
     printPotez();
+
+    $("#dalje").click(promenaPoteza);
+    $("#odgovori").click(odgovori);
 
 
 })
