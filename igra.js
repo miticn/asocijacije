@@ -2,6 +2,8 @@ $(document).ready(function() {
     function getAsoc(max){
         return Math.floor(Math.random() * max) + 1;
     }
+    let igrac1Rez = 0;//plavi
+    let igrac2Rez = 0;//crveni
 
     const trajanjePoteza = 10*1000;
     const trajanjeIgre = 4*60*1000;
@@ -30,15 +32,17 @@ $(document).ready(function() {
 
     function tacanOdgovor(kolona){// poseban slucaj za final
         let boja;
-        if(turn == 'Plavi') boja = "blue";
-        else if(turn == 'Crveni') boja = "red";
+        if(turn == 'Plavi') boja = "#2d3798";
+        else if(turn == 'Crveni') boja = "#F52424";
 
         for(i=1;i<=4;i++){
             polje = "#"+kolona+i;
             $(polje).val(curAsocijacija[kolona][i-1]);
             $(polje).css("background-color",boja);
+            $(polje).css("color","white");
         }
         $("#"+kolona).css("background-color",boja);
+        $("#"+kolona).css("color","white");
         $("#"+kolona).val(curAsocijacija[kolona][4]);
         answered[kolona] = true;
         blockInput[kolona] = true;
@@ -74,6 +78,10 @@ $(document).ready(function() {
         else if(turn == 'Crveni') turn = 'Plavi';
         printPotez();
         blockOpen = false;
+
+        for(i=0;i<4;i++){
+            if(!answered[inputAnswer[i]]) $("#"+inputAnswer[i]).val("");
+        }
     }
 
     function printPotez(){
