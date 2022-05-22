@@ -1,9 +1,9 @@
 $(document).ready(function() {
-    function getAsoc(max){
-        return Math.floor(Math.random() * max) + 1;
-    }
-    let igrac1Rez = 0;//plavi
-    let igrac2Rez = 0;//crveni
+    let igrac1RezP = 0;//plavi
+    let igrac2RezC = 0;//crveni
+
+    let startTimeIgra;
+    let startTimePotez;
 
     const trajanjePoteza = 10*1000;
     const trajanjeIgre = 4*60*1000;
@@ -15,71 +15,95 @@ $(document).ready(function() {
 
     let inputAnswer = ["A","B","C","D","final"];
 
-    let answered = {
-        A : false,
-        B : false,
-        C : false,
-        D : false,
-        final : false
+    function msToMinandSec(ms) {
+        var min = Math.floor(ms / 60000);
+        var sec = ((ms % 60000) / 1000).toFixed(0);
+        return min + ":" + (sec < 10 ? '0' : '') + sec;
     }
-    let blockInput ={
-        A : false,
-        B : false,
-        C : false,
-        D : false,
-        final : false
-    };
 
-    function tacanOdgovor(kolona){// poseban slucaj za final
+    function clearAnswers(){
+        for(let i=0;i<5;i++){
+            if(!$("#"+inputAnswer[i]).prop("disabled")) $("#"+inputAnswer[i]).val("");
+        }
+
+    }
+    function tacanOdgovor(kolona, turn){
+        $("#"+kolona).attr("disabled", true);
         let boja;
         if(turn == 'Plavi') boja = "#2d3798";
         else if(turn == 'Crveni') boja = "#F52424";
 
-        for(i=1;i<=4;i++){
-            polje = "#"+kolona+i;
-            $(polje).val(curAsocijacija[kolona][i-1]);
-            $(polje).css("background-color",boja);
-            $(polje).css("color","white");
+        if(kolona=='final'){
+            for(let i=0;i<4;i++){
+                if(!$("#"+inputAnswer[i]).prop("disabled")) tacanOdgovor(inputAnswer[i],turn);
+            }
+            $("#"+kolona).css("background-color",boja);
+            $("#"+kolona).css("color","white");
+            $("#"+kolona).val(curAsocijacija[kolona]);
         }
-        $("#"+kolona).css("background-color",boja);
-        $("#"+kolona).css("color","white");
-        $("#"+kolona).val(curAsocijacija[kolona][4]);
-        answered[kolona] = true;
-        blockInput[kolona] = true;
-        updateInputBlock(answered);
+        else{
+            for(let i=1;i<=4;i++){
+                polje = "#"+kolona+i;
+                if($(polje).val()!=curAsocijacija[kolona][i-1]){
+                    $(polje).val(curAsocijacija[kolona][i-1]);
+                    if(turn=='Plavi'){igrac1RezP++;}
+                    else if(turn=='Crveni'){igrac2RezC++;}
+                }
+                $(polje).css("background-color",boja);
+                $(polje).css("color","white");
+            }
+            if(turn=='Plavi'){igrac1RezP+=5;}
+            else if(turn=='Crveni'){igrac2RezC+=5;}
+            $("#"+kolona).css("background-color",boja);
+            $("#"+kolona).css("color","white");
+            $("#"+kolona).val(curAsocijacija[kolona][4]);
+        }
     }
 
     function odgovori(){
-        if($("#A").val().toUpperCase()==curAsocijacija["A"][4] && !answered["A"]){
-            tacanOdgovor("A");
+        let t = turn;
+        let col = '';
+        switch($(this).attr("id")) {
+            case 'formodgovorA':
+                col = 'A';
+                break;
+            case 'formodgovorB':
+                col = 'B';
+                break;
+            case 'formodgovorC':
+                col = 'C';
+                break;
+            case 'formodgovorD':
+                col = 'D';
+                break;
+            case 'formodgovorFinal':
+                col = 'final';
+                break;
         }
-        else if($("#B").val().toUpperCase()==curAsocijacija["B"][4] && !answered["B"]){
-            tacanOdgovor("B");
-        }
-        else if($("#C").val().toUpperCase()==curAsocijacija["C"][4] && !answered["C"]){
-            tacanOdgovor("C");
-        }
-        else if($("#D").val().toUpperCase()==curAsocijacija["D"][4]  && !answered["D"]){
-            tacanOdgovor("D");
-        }
-        else if($("#final").val().toUpperCase()==curAsocijacija["final"] && !answered["final"]){
-            tacanOdgovor("final")
-        }
+        if($("#"+col).val()=='') return;//ako je prazno polje ignorisi odgovor
+        if(col!='final' && $("#"+col).val().toUpperCase()==curAsocijacija[col][4])
+            tacanOdgovor(col,t);
+        else if(col=='final' && $("#"+col).val().toUpperCase()==curAsocijacija[col])
+            tacanOdgovor(col,t);
         else{
-            alert("Netacno");
+            //alert("Netacno");
             promenaPoteza();
         }
     }
 
     function promenaPoteza(){
+        startTimePotez = (new Date()).getTime();
         window.clearTimeout(potezTimer);
         potezTimer = window.setTimeout(istekaoPotez,trajanjePoteza);
+        
+        clearAnswers();
+
         if(turn == 'Plavi') turn = 'Crveni';
         else if(turn == 'Crveni') turn = 'Plavi';
         printPotez();
         blockOpen = false;
 
-        for(i=0;i<4;i++){
+        for(let i=0;i<4;i++){
             if(!answered[inputAnswer[i]]) $("#"+inputAnswer[i]).val("");
         }
     }
@@ -88,10 +112,18 @@ $(document).ready(function() {
         $("h1").text("Trenutno je potez: "+turn);
         if(turn == 'Plavi') document.body.style.backgroundColor = "#bec6ed";
         else if(turn == 'Crveni') document.body.style.backgroundColor = "#edbebe";
+        let preostaloIgra = (trajanjeIgre- ( (new Date()).getTime() - startTimeIgra ));
+        let preostaloPotez = (trajanjePoteza- ( (new Date()).getTime() - startTimePotez ));
+        $("#vremeigre").text("Preostalo vreme igre: "+msToMinandSec(preostaloIgra));
+        $("#vremepoteza").text("Preostalo vreme poteza: "+msToMinandSec(preostaloPotez));
+        $("#rez1p").text("plavi: "+igrac1RezP);
+        $("#rez2c").text("crveni: "+igrac2RezC);
 
     }
+
     function istekloVreme(){
         window.clearTimeout(potezTimer);
+        clearInterval(refresh);
         alert("Isteklo vreme");
     }
 
@@ -101,6 +133,8 @@ $(document).ready(function() {
 
     function start(){
         window.setTimeout(istekloVreme,trajanjeIgre);
+        startTimePotez = (new Date()).getTime();
+        startTimeIgra = (new Date()).getTime();
 
         potezTimer = window.setTimeout(istekaoPotez,trajanjePoteza);
 
@@ -108,26 +142,10 @@ $(document).ready(function() {
 
     }
 
-    function updateInputBlock(blockInput){
-        //alert(JSON.stringify(blockInput));
-        for(j=0; j<5; j++){
-            $("#"+inputAnswer[j]).prop( "disabled", blockInput[inputAnswer[j]]);
-        }
-    }
+    let curAsocijacija = JSON.parse(localStorage.getItem("trenutna_asoc"));
 
-
-    let asocijacija ={
-        A : ["ZANIMANJE","POSAO","VOJNIK","ADVOKAT","PROFESIJA"],
-        B : ["PRED VRATIMA","VOJSKOVOĐA","KARTAGINA","SLONOVI","HANIBAL"],
-        C : ["MIŠIĆ","DUGAČAK","CIPELA","DLAKA","JEZIK"],
-        D : ["FONOLOGIJA","SINTAKSA","SEMANTIKA","PRAVILA","GRAMATIKA"],
-        final : "LEKTOR"
-    };
-
-    let curAsocijacija = asocijacija;
-
-    for(i=1; i<=4; i++){//Open field
-        for(j=0,g = String.fromCharCode(65 + j); j<4; j++,g = String.fromCharCode(65 + j)){
+    for(let i=1; i<=4; i++){//Open field
+        for(let j=0,g = String.fromCharCode(65 + j); j<4; j++,g = String.fromCharCode(65 + j)){
             //alert("#"+g+i);
             $("#"+g+i).click(function (){
                 if(!blockOpen)
@@ -136,32 +154,17 @@ $(document).ready(function() {
             })
         }
     }
-
-    //Block other input
-    for(j=0; j<5; j++){
-        $("#"+inputAnswer[j]).on('input', function() {
-            if($(this).val()!=""){
-                for(j=0; j<5; j++){
-                    blockInput[inputAnswer[j]] = true;
-                }
-                //alert($(this).attr("id"));
-                blockInput[$(this).attr("id")] = false;
-            }
-            else{
-                for(j=0; j<5; j++){
-                    blockInput = answered;
-                }
-            }
-            updateInputBlock(blockInput);
-            
-        });
-    }
     
+
     start();
-    printPotez();
+    let refresh = setInterval(printPotez,500);
 
     $("#dalje").click(promenaPoteza);
-    $("#odgovori").click(odgovori);
+    $("#formodgovorA").submit(odgovori);
+    $("#formodgovorB").submit(odgovori);
+    $("#formodgovorC").submit(odgovori);
+    $("#formodgovorD").submit(odgovori);
+    $("#formodgovorFinal").submit(odgovori);
 
 
 })

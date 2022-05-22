@@ -1,7 +1,7 @@
 $(document).ready(function(){
     let sub1 = false;
     let sub2 = false;
-
+    const br_asocijacija = 5;
     let asocijacije =[{
         A : ["ZANIMANJE","POSAO","VOJNIK","ADVOKAT","PROFESIJA"],
         B : ["PRED VRATIMA","VOJSKOVOĐA","KARTAGINA","SLONOVI","HANIBAL"],
@@ -37,24 +37,27 @@ $(document).ready(function(){
         D : ["SITAN","IZNOS","POMOĆ","JEDINICA","NOVAC"],
         final : "SREDSTVO"
     }];
-
-    localStorage.setItem('asocijacije', asocijacije);
-    localStorage.setItem('igrac1','');
-    localStorage.setItem('igrac2','');
+    //provera da li je prazno i tako to
+    
+    function init(){
+        if (localStorage.getItem("asocijacije") === null) {
+            localStorage.setItem('asocijacije', JSON.stringify(asocijacije));
+        }
+        else{
+            asocijacije = JSON.parse(localStorage.getItem("asocijacije"));
+        }
+    }
 
     function start(){
-        alert("pocetak igre");
+        let trenutna_asoc = Math.floor(Math.random()*br_asocijacija);
+        localStorage.setItem('trenutna_asoc',JSON.stringify(asocijacije[trenutna_asoc]));
+        window.location.replace("asocijacije-igra.html");
     }
-    function igrac1(){
-        alert($("#igrac1txt").val());
-    }
-
-    function igrac2(){
-        alert("test");
-    }
-
+    
+    init();
     $("#igrac1form").submit(function(){
         $("#igrac1txt").attr('readonly', true);
+        localStorage.setItem('igrac1',$("#igrac1txt").val());
         sub1 = true;
         if(sub2) start();
 
@@ -62,6 +65,7 @@ $(document).ready(function(){
 
     $("#igrac2form").submit(function(){
         $("#igrac2txt").attr('readonly', true);
+        localStorage.setItem('igrac2',$("#igrac2txt").val());
         sub2 = true;
         if(sub1) start();
 

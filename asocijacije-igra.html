@@ -18,7 +18,10 @@
         <div class="row " >
             <div class="col-sm-3 offset-sm-4">
                 <h1></h1>
-                <p>Preostalo vreme:</p>
+                <p id="vremeigre"></p>
+                <p id="vremepoteza"></p>
+                <p id="rez1p"></p>
+                <p id="rez2c"></p>
             </div>
         </div>
         <div class="row" >
@@ -45,12 +48,8 @@
             <div class="col-sm-3 offset-sm-2">
                 <input class="form-control flex-fill to-open text-center" type="text" tabIndex="-1" value ="A3" id="A3"readonly>
             </div>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <input class="center-block" type="button" id="dalje" value="Dalje">   
-            </div>
-            
-            <div class="col-sm-1">
-                <input class="" type="submit" id="odgovori" value="Odgovori">   
             </div>
 
             <div class="col-sm-3">
@@ -68,34 +67,39 @@
             
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3 offset-sm-3">
-                <input class="form-control flex-fill text-center" type="text" placeholder="A" id="A">
-            
+        
+            <div class="row">
+                <div class="col-sm-3 offset-sm-3">
+                    <form id="formodgovorA" onSubmit="return false;">
+                        <input class="form-control flex-fill text-center" type="text" placeholder="A" id="A">
+                    </form>
+                </div>
+                <div class="col-sm-3">
+                    <form id="formodgovorB" onSubmit="return false;">
+                        <input class="form-control flex-fill text-center" type="text" placeholder="B" id="B">
+                    </form>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <input class="form-control flex-fill text-center" type="text" placeholder="B" id="B">
-            
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 offset-sm-3">
-                <input class="form-control flex-fill text-center" type="text" placeholder="???" id="final">
-            
-            </div>
+            <div class="row">
+                <div class="col-sm-6 offset-sm-3">
+                    <form id="formodgovorFinal" onSubmit="return false;">
+                        <input class="form-control flex-fill text-center" type="text" placeholder="???" id="final">
+                    </form>
+                </div>
 
-        </div>
-        <div class="row">
-            <div class="col-sm-3 offset-sm-3">
-                <input class="form-control flex-fill text-center" type="text" placeholder="C" id="C">
-            
             </div>
-            <div class="col-sm-3">
-                <input class="form-control flex-fill text-center" type="text" placeholder="D" id="D">
-            
+            <div class="row">
+                <div class="col-sm-3 offset-sm-3">
+                    <form id="formodgovorC" onSubmit="return false;">
+                        <input class="form-control flex-fill text-center" type="text" placeholder="C" id="C">
+                    </form>
+                </div>
+                <div class="col-sm-3">
+                    <form id="formodgovorD" onSubmit="return false;">
+                        <input class="form-control flex-fill text-center" type="text" placeholder="D" id="D">
+                    </form>
+                </div>
             </div>
-        </div>
-
         <div class="row " >
             <div class="col-sm-3 offset-sm-3">
                 <input class="form-control flex-fill to-open text-center" type="text" tabIndex="-1" value ="C4" id="C4" readonly>
