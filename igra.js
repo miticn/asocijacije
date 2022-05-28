@@ -169,17 +169,19 @@ $(document).ready(function() {
             blockOpen = true;
             $("#dalje").attr("disabled", true);
             if(igrac1RezP == igrac2RezC){
-                alert("Nereseno je");
+                $("#modalRezultat").text("Nerešeno je. Oba igrača su osvojila po "+igrac1RezP+" bodova.");
             }
             else if(igrac1RezP>igrac2RezC){
-                alert("Pobednik je "+ igrac1Ime);
+                $("#modalRezultat").text("Pobednik je "+ igrac1Ime+ "." +"Osvojio je "+ igrac1RezP +",a "+ igrac2Ime + " je osvojio " + igrac2RezC + "bodova.");
             }else{
-                alert("Pobednik je "+ igrac2Ime);
+                $("#modalRezultat").text("Pobednik je "+ igrac2Ime+ "." +"Osvojio je "+ igrac2RezC +",a "+ igrac1Ime + " je osvojio " + igrac1RezP + "bodova.");
+
             }
             otvoriNeotvoreno();
             window.clearTimeout(potezTimer);
             clearInterval(refresh);
             printPotez();
+            $("#KrajRezulatat").modal("toggle");
 
         }
 
@@ -199,7 +201,6 @@ $(document).ready(function() {
             startTimeIgra = (new Date()).getTime();
 
             potezTimer = window.setTimeout(istekaoPotez,trajanjePoteza);
-
 
 
         }
