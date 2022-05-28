@@ -2,6 +2,9 @@ input.to-open{
     cursor: pointer; 
 }
 
+#tabla{
+    color:white;
+}
 .igrac-red{
     background-color: #F52424;
     color: white;

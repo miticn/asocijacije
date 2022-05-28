@@ -119,15 +119,27 @@ $(document).ready(function() {
         }
 
         function printPotez(){
-            $("h1").text("Trenutno je potez: "+turn);
-            if(turn == 'Plavi') document.body.style.backgroundColor = "#bec6ed";
-            else if(turn == 'Crveni') document.body.style.backgroundColor = "#edbebe";
+            $("h1").text("Na potezu je: "+turn);
             let preostaloIgra = (trajanjeIgre- ( (new Date()).getTime() - startTimeIgra ));
             let preostaloPotez = (trajanjePoteza- ( (new Date()).getTime() - startTimePotez ));
-            $("#vremeigre").text("Preostalo vreme igre: "+msToMinandSec(preostaloIgra));
-            $("#vremepoteza").text("Preostalo vreme poteza: "+msToMinandSec(preostaloPotez));
-            $("#rez1p").text("plavi "+igrac1Ime+": "+igrac1RezP);
-            $("#rez2c").text("crveni "+igrac2Ime+": "+igrac2RezC);
+            $("#vremeigre").text("Preostalo vreme: "+msToMinandSec(preostaloIgra));
+            if(turn=='Plavi'){
+                $("#tabla").addClass("bg-primary");
+                $("#tabla").removeClass("bg-danger");
+                $("#vremepoteza1p").text(""+msToMinandSec(preostaloPotez));
+                $("#vremepoteza2c").text("");
+            }
+            else{
+                $("#tabla").addClass("bg-danger");
+                $("#tabla").removeClass("bg-primary");
+                $("#vremepoteza2c").text(""+msToMinandSec(preostaloPotez));
+                $("#vremepoteza1p").text("");
+            }
+            
+            $("#rez1p").text("Rezultat: "+igrac1RezP);
+            $("#rez2c").text("Rezultat: "+igrac2RezC);
+            $("#ime1p").text(igrac1Ime);
+            $("#ime2c").text(igrac2Ime);
 
         }
 
