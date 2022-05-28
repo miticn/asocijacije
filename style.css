@@ -1,7 +1,9 @@
 input.to-open{
     cursor: pointer; 
 }
-
+#dalje{
+    font-size: 0.80rem;
+}
 #tabla{
     color:white;
 }
@@ -19,6 +21,7 @@ input.to-open{
 body{
 	background: rgb(2,0,36);
 	background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-	background-repeat: round;
+	background-repeat: no-repeat;
+    background-attachment: fixed;
 	height: 100vh;
 }

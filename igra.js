@@ -26,6 +26,7 @@ $(document).ready(function() {
         let igrac2Ime = localStorage.getItem("igrac2");
 
         function msToMinandSec(ms) {
+            if(ms<0) ms =0;
             var min = Math.floor(ms / 60000);
             var sec = ((ms % 60000) / 1000).toFixed(0);
             return min + ":" + (sec < 10 ? '0' : '') + sec;
@@ -37,7 +38,7 @@ $(document).ready(function() {
             }
 
         }
-        function tacanOdgovor(kolona, turn){
+        function tacanOdgovor(kolona, turn,recurz){
             $("#"+kolona).attr("disabled", true);
             let boja;
             if(turn == 'Plavi') boja = "#2d3798";
@@ -45,8 +46,10 @@ $(document).ready(function() {
 
             if(kolona=='final'){
                 for(let i=0;i<4;i++){
-                    if(!$("#"+inputAnswer[i]).prop("disabled")) tacanOdgovor(inputAnswer[i],turn);
+                    if(!$("#"+inputAnswer[i]).prop("disabled")) tacanOdgovor(inputAnswer[i],turn,true);
                 }
+                if(turn=='Plavi'){igrac1RezP+=10;}
+                else if(turn=='Crveni'){igrac2RezC+=10;}
                 $("#"+kolona).css("background-color",boja);
                 $("#"+kolona).css("color","white");
                 $("#"+kolona).val(curAsocijacija[kolona]);
@@ -63,8 +66,10 @@ $(document).ready(function() {
                     $(polje).css("background-color",boja);
                     $(polje).css("color","white");
                 }
-                if(turn=='Plavi'){igrac1RezP+=5;}
-                else if(turn=='Crveni'){igrac2RezC+=5;}
+                if(!recurz){
+                    if(turn=='Plavi'){igrac1RezP+=5;}
+                    else if(turn=='Crveni'){igrac2RezC+=5;}
+                }
                 $("#"+kolona).css("background-color",boja);
                 $("#"+kolona).css("color","white");
                 $("#"+kolona).val(curAsocijacija[kolona][4]);
@@ -93,9 +98,9 @@ $(document).ready(function() {
             }
             if($("#"+col).val()=='') return;//ako je prazno polje ignorisi odgovor
             if(col!='final' && $("#"+col).val().toUpperCase()==curAsocijacija[col][4])
-                tacanOdgovor(col,t);
+                tacanOdgovor(col,t,false);
             else if(col=='final' && $("#"+col).val().toUpperCase()==curAsocijacija[col])
-                tacanOdgovor(col,t);
+                tacanOdgovor(col,t,false);
             else{
                 //alert("Netacno");
                 promenaPoteza();
@@ -172,9 +177,9 @@ $(document).ready(function() {
                 $("#modalRezultat").text("Nerešeno je. Oba igrača su osvojila po "+igrac1RezP+" bodova.");
             }
             else if(igrac1RezP>igrac2RezC){
-                $("#modalRezultat").text("Pobednik je "+ igrac1Ime+ "." +"Osvojio je "+ igrac1RezP +",a "+ igrac2Ime + " je osvojio " + igrac2RezC + "bodova.");
+                $("#modalRezultat").text("Pobednik je "+ igrac1Ime+ ". " +"Osvojio je "+ igrac1RezP +", a "+ igrac2Ime + " je osvojio " + igrac2RezC + " bodova.");
             }else{
-                $("#modalRezultat").text("Pobednik je "+ igrac2Ime+ "." +"Osvojio je "+ igrac2RezC +",a "+ igrac1Ime + " je osvojio " + igrac1RezP + "bodova.");
+                $("#modalRezultat").text("Pobednik je "+ igrac2Ime+ ". " +"Osvojio je "+ igrac2RezC +", a "+ igrac1Ime + " je osvojio " + igrac1RezP + " bodova.");
 
             }
             otvoriNeotvoreno();
