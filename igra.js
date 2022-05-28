@@ -50,6 +50,7 @@ $(document).ready(function() {
                 $("#"+kolona).css("background-color",boja);
                 $("#"+kolona).css("color","white");
                 $("#"+kolona).val(curAsocijacija[kolona]);
+                krajIgre();
             }
             else{
                 for(let i=1;i<=4;i++){
@@ -142,11 +143,50 @@ $(document).ready(function() {
             $("#ime2c").text(igrac2Ime);
 
         }
+        
+        function otvoriNeotvoreno(){
+            for(let i = 0; i < 4; i++){
+                for(let j = 1; j <=4; j++){
+                    if(!$("#"+inputAnswer[i]).prop("disabled")){
+                        $("#"+inputAnswer[i]+j).val(curAsocijacija[inputAnswer[i]][j-1]);
+                        $("#"+inputAnswer[i]+j).css("background-color","#E5B535");
+                    }
+                }
+                if(!$("#"+inputAnswer[i]).prop("disabled")){
+                    $("#"+inputAnswer[i]).prop("disabled",true);
+                    $("#"+inputAnswer[i]).val(curAsocijacija[inputAnswer[i]][4]);
+                    $("#"+inputAnswer[i]).css("background-color","#E5B535");
+                }
+            }
+            if(!$("#final").prop("disabled")){
+                $("#final").prop("disabled",true);
+                $("#final").val(curAsocijacija['final']);
+                $("#final").css("background-color","#E5B535");
+            }
+        }
+
+        function krajIgre(){
+            blockOpen = true;
+            $("#dalje").attr("disabled", true);
+            if(igrac1RezP == igrac2RezC){
+                alert("Nereseno je");
+            }
+            else if(igrac1RezP>igrac2RezC){
+                alert("Pobednik je "+ igrac1Ime);
+            }else{
+                alert("Pobednik je "+ igrac2Ime);
+            }
+            otvoriNeotvoreno();
+            window.clearTimeout(potezTimer);
+            clearInterval(refresh);
+            printPotez();
+
+        }
 
         function istekloVreme(){
             window.clearTimeout(potezTimer);
             clearInterval(refresh);
-            alert("Isteklo vreme");
+            krajIgre();
         }
 
         function istekaoPotez(){
