@@ -51,6 +51,7 @@ $(document).ready(function(){
     function start(){
         let trenutna_asoc = Math.floor(Math.random()*br_asocijacija);
         localStorage.setItem('trenutna_asoc',JSON.stringify(asocijacije[trenutna_asoc]));
+        localStorage.setItem("gard",JSON.stringify(false));
         window.location.replace("asocijacije-igra.html");
     }
     

@@ -9,24 +9,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="uputstvo.js"></script>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>Uputstvo:</h1>
-        <ol>
-            <li>Eto    </li>
-            <li>Eto    </li>
-            <li>Eto    </li>
-            <li>Eto    </li>
+        <ol class="bg-light">
+            <li>U igri asocijacije postoje četiri sporedne asocijacije, pomoću kojih treba rešiti glavnu asocijaciju.    </li>
+            <li>Svaki igrač na svom potezu ima maksimalno 10 sekundi.</li>
+            <li>Nakon otkrivanja pojma, igrač ima mogućnost da pogađa ili glavnu ili sporednu asocijaciju.</li>
+            <li>U slučaju da igrač ne želi da pogađa asocijaciju, onda može da pritisne dugme "Dalje" i završi potez.</li>
+            <li>Za rešenje sporedne asocijacije se dobija 5 poena plus broj neotkrivenih pojmova u njegovoj koloni. </li>
+            <li>Za rešenje glavne asocijacije se dobija 10 poena plus broj svih neotkrivenih pojmova.</li>
+            <li>Prvi potez igra plavi.</li>
+            <li>Igra traje četiri minuta.</li>
+            <li>Unosom imena u polje i klikom na dugme potvrdi igrač potvrđuje da je upoznat sa pravilima.</li>
+            <li>Da bi igra otpočela oba igrača moraju da kliknu na dugme potvrdi</li>
         </ol>
-        <form id="igrac1form"  onsubmit="return false" method="post">
-            <input type="text" placeholder="Igrac1" id="igrac1txt" required>
-            <input type="submit"value="Potvrdi">
-        </form>
-        <form id="igrac2form" onsubmit="return false" method="post">
-            <input type="text" placeholder="Igrac2" id="igrac2txt" required>
-            <input type="submit" value="Potvrdi">
-        </form>
+        <div class="bg-light">
+            <form id="igrac1form"  onsubmit="return false" method="post">
+                <label for="igrac1txt">Plavi:</label><br>
+                <input type="text" placeholder="Igrac1" id="igrac1txt" required>
+                <input type="submit"value="Potvrdi">
+            </form>
+            <form id="igrac2form" onsubmit="return false" method="post">
+                <label for="igrac2txt">Crveni:</label><br>
+                <input type="text" placeholder="Igrac2" id="igrac2txt" required>
+                <input type="submit" value="Potvrdi">
+            </form>
+            </div>
     </div>
     
 </body>
